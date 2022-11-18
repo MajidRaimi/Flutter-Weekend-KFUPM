@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "411646791253",
+    "project_id": "flutter-weekend-kfupm",
+    "storage_bucket": "flutter-weekend-kfupm.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:411646791253:android:23d882103fe303ccaccedc",
+        "android_client_info": {
+          "package_name": "com.example.iau_flutter_weekend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "411646791253-c6slbt43sjotts435kh189tb0sn9j8mc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyJs43PVXMwxiaUGcsWMxo1-22ksfL5EE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "411646791253-c6slbt43sjotts435kh189tb0sn9j8mc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
