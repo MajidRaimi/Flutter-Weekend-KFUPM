@@ -27,6 +27,10 @@ dependencies:
   riverpod: ^2.1.1
   uuid: ^3.0.7
 
+module:
+    androidX: true
+
+
 dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:
