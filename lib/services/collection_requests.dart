@@ -14,13 +14,19 @@ class CollectionsRequests {
   }
 
   // Add Bookmark
-  Future<void> addBookmark(String bookmark) async {
+  Future<void> addBookmark(String bookmark, int long, int lat) async {
     final userDocument = await _firestore
         .collection("users")
         .doc(userCredential!.user!.uid)
         .get();
     final bookmarks = userDocument.data()!["bookmark"] as List<dynamic>;
-    bookmarks.add(bookmark);
+    bookmarks.add(
+      {
+        "cityName": bookmark,
+        "long": long,
+        "lat": lat,
+      },
+    );
     await _firestore
         .collection("users")
         .doc(userCredential!.user!.uid)

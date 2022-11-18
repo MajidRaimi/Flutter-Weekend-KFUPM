@@ -27,6 +27,8 @@ class TestBookmarks extends StatelessWidget {
                   print(_bookmarkController.text);
                   _collectionsInstance.addBookmark(
                     _bookmarkController.text,
+                    0,
+                    0,
                   );
                 },
                 child: const Text("Add"),
