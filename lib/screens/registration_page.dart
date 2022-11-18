@@ -12,7 +12,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
   final _formKey = GlobalKey<FormState>();
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
-  final _nationalIDController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
@@ -23,7 +22,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
   void dispose() {
     _firstNameController.dispose();
     _lastNameController.dispose();
-    _nationalIDController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
@@ -45,13 +43,21 @@ class _RegistrationPageState extends State<RegistrationPage> {
         email: _emailController.text,
         password: _passwordController.text,
       );
+      // Update additional information of user
+      userCredential!.additionalUserInfo!.profile?.addAll(
+        {
+          'firstName': _firstNameController.text,
+          'lastName': _lastNameController.text,
+        },
+      );
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        showsnackbar(context, "No user found for that email.");
-      } else if (e.code == 'wrong-password') {
-        showsnackbar(context, "Wrong password provided for that user.");
+      if (e.code == 'weak-password') {
+        showsnackbar(context, "The password provided is too weak.");
+      } else if (e.code == 'email-already-in-use') {
+        showsnackbar(context, "The account already exists for that email.");
       }
     }
+    print(userCredential.toString());
   }
 
   @override
@@ -195,11 +201,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Processing Data"),
-                          ),
-                        );
+                        showsnackbar(context, "Registering...");
+                        register();
                       }
                     },
                     child: const Text("Submit"),
