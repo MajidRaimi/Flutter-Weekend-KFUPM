@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:iau_flutter_weekend/screens/login_page.dart';
+import 'package:iau_flutter_weekend/services/collection_requests.dart';
 
 class RegistrationPage extends StatefulWidget {
   const RegistrationPage({super.key});
@@ -18,6 +21,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   bool _passwordVisible = false;
   UserCredential? userCredential;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   @override
   void dispose() {
     _firstNameController.dispose();
@@ -37,27 +41,36 @@ class _RegistrationPageState extends State<RegistrationPage> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  void register() async {
+  void toNextPage() {
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+      return const LoginPage();
+    }));
+  }
+
+  Future<int> register() async {
     try {
       userCredential = await _auth.createUserWithEmailAndPassword(
         email: _emailController.text,
         password: _passwordController.text,
       );
-      // Update additional information of user
-      userCredential!.additionalUserInfo!.profile?.addAll(
+      // Update additional information of user in collections
+      _firestore.collection("users").doc(userCredential!.user!.uid).set(
         {
-          'firstName': _firstNameController.text,
-          'lastName': _lastNameController.text,
+          "firstName": _firstNameController.text,
+          "lastName": _lastNameController.text,
+          "bookmark": [],
         },
       );
+      CollectionsRequests.userCredential = userCredential;
+      return 0;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         showsnackbar(context, "The password provided is too weak.");
       } else if (e.code == 'email-already-in-use') {
         showsnackbar(context, "The account already exists for that email.");
       }
+      return 1;
     }
-    print(userCredential.toString());
   }
 
   @override
@@ -199,10 +212,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     },
                   ),
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         showsnackbar(context, "Registering...");
-                        register();
+                        int confirmation = await register();
+                        if (confirmation == 0) {
+                          toNextPage();
+                        }
                       }
                     },
                     child: const Text("Submit"),

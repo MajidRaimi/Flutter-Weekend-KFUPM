@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:iau_flutter_weekend/screens/main_page.dart';
 import 'package:iau_flutter_weekend/screens/registration_page.dart';
+import 'package:iau_flutter_weekend/screens/test_bookmarks.dart';
+import 'package:iau_flutter_weekend/services/collection_requests.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -28,19 +31,33 @@ class _LoginPage extends State<LoginPage> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
+  void toNextPage() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return const TestBookmarks();
+        },
+      ),
+    );
+  }
+
   // Login function
-  void login() async {
+  Future<int> login() async {
     try {
       userCredential = await _auth.signInWithEmailAndPassword(
         email: emailForm.text,
         password: passwordForm.text,
       );
+      CollectionsRequests.userCredential = userCredential;
+      return 0;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         showsnackbar(context, "No user found for that email.");
       } else if (e.code == 'wrong-password') {
         showsnackbar(context, "Wrong password provided for that user.");
       }
+      return 1;
     }
   }
 
@@ -120,9 +137,12 @@ class _LoginPage extends State<LoginPage> {
                 ),
                 const SizedBox(height: 10),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      login();
+                      int confirmation = await login();
+                      if (confirmation == 0) {
+                        toNextPage();
+                      }
                     }
                   },
                   child: const Text("Login"),
