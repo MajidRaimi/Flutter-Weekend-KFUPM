@@ -73,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
         email: _emailController.text,
         password: _passwordController.text,
       );
-      CollectionsRequests.userCredential = userCredential;
+      CollectionsRequests.currentUser = userCredential!.user;
       setState(() {
         isLoading = false;
       });

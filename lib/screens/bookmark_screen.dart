@@ -1,33 +1,48 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:iau_flutter_weekend/constants/colors.dart';
+import 'package:iau_flutter_weekend/services/collections_requests.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 import 'login_screen.dart';
 
 class BookmarkScreen extends StatefulWidget {
+  const BookmarkScreen({super.key});
+
   @override
   State<BookmarkScreen> createState() => _BookmarkScreenState();
 }
 
 class _BookmarkScreenState extends State<BookmarkScreen> {
-  Future<void> _handleRefresh() {
+  List<dynamic> bookmarks = [];
+  CollectionsRequests collections = CollectionsRequests();
+  Future<void> _handleRefresh() async {
+    setState(() {
+      collections.addBookmark(
+          "locationName1", "location", "imageLink", "111", "information");
+      collections.addBookmark(
+          "locationName2", "location", "imageLink", "222", "information");
+      collections.addBookmark(
+          "locationName3", "location", "imageLink", "333", "information");
+    });
+    bookmarks = await collections.getBookmarks();
     return Future.delayed(const Duration(seconds: 2));
   }
 
   @override
   Widget build(BuildContext context) {
-    void toLoginScreen(context) {
+    final double height = MediaQuery.of(context).size.height;
+
+    void toLoginScreen() {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => const LoginScreen(),
+          builder: (context) {
+            return const LoginScreen();
+          },
         ),
       );
     }
-
-    // get the height of the Screen
-    final double height = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: AppBar(
@@ -36,7 +51,10 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
           IconButton(
             onPressed: () async {
               await FirebaseAuth.instance.signOut();
-              toLoginScreen(context);
+              setState(() {
+                CollectionsRequests.currentUser = null;
+              });
+              toLoginScreen();
             },
             icon: const Icon(Icons.logout, color: kBlueColor),
           ),
@@ -58,7 +76,35 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
             height: height * 0.5,
             onRefresh: _handleRefresh,
             child: ListView(
-              children: [EmptyBookmark()],
+              children: bookmarks == null
+                  ? const [EmptyBookmark()]
+                  : [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          const Icon(
+                            Icons.group,
+                            size: 100,
+                          ),
+                          const Text(
+                            "Team",
+                            style: TextStyle(fontSize: 30),
+                          ),
+                          // Show all user information from a list of users
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: bookmarks.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                var bookmark = bookmarks[index];
+                                return ListTile(
+                                    title: bookmark['locationName'],
+                                    subtitle: bookmark['location']);
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
             ),
           ),
         ),

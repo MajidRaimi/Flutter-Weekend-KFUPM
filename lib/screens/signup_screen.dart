@@ -40,7 +40,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         title: 'Sorry error ocurred!',
         message: text,
         contentType: ContentType.failure,
-        
       ),
       duration: const Duration(seconds: 1, milliseconds: 500),
     );
@@ -70,7 +69,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           "bookmark": [],
         },
       );
-      CollectionsRequests.userCredential = userCredential;
+      CollectionsRequests.currentUser = userCredential!.user;
       setState(() {
         isLoading = false;
       });

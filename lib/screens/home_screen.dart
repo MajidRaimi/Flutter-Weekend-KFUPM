@@ -1,5 +1,7 @@
 import 'package:circle_nav_bar/circle_nav_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:iau_flutter_weekend/services/collections_requests.dart';
 
 import '../constants/colors.dart';
 import 'bookmark_screen.dart';
@@ -17,7 +19,9 @@ class _HomeScreenState extends State<HomeScreen> {
   int get tabIndex => _tabIndex;
   set tabIndex(int v) {
     _tabIndex = v;
-    setState(() {});
+    setState(() {
+      CollectionsRequests.currentUser = FirebaseAuth.instance.currentUser;
+    });
   }
 
   late PageController pageController;
