@@ -90,14 +90,19 @@ class _BookmarkScreenState extends ConsumerState<BookmarkScreen> {
                               itemBuilder: (BuildContext context, int index) {
                                 var bookmark = bookmarks[index];
                                 return ListTile(
-                                    title: Text(bookmark.locationName),
-                                    subtitle: Text(bookmark.location),
-                                    trailing: ElevatedButton(child: Icon(Icons.delete) ,onPressed: (){
-                                      ref.read(BookmarksProvider.notifier).removeBookmark(bookmark.tag);
-                                      collections.removeBookmark(bookmark.locationName);
-
-                                    },),
-                                    );
+                                  title: Text(bookmark.locationName),
+                                  subtitle: Text(bookmark.location),
+                                  trailing: ElevatedButton(
+                                    child: Icon(Icons.delete),
+                                    onPressed: () {
+                                      ref
+                                          .read(BookmarksProvider.notifier)
+                                          .removeBookmark(bookmark.tag);
+                                      collections.removeBookmark(
+                                          bookmark.locationName);
+                                    },
+                                  ),
+                                );
                               },
                             ),
                           ),
@@ -119,18 +124,24 @@ class EmptyBookmark extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
-        SizedBox(height: 20),
-        Text(
+      children: [
+        Lottie.asset(
+          'assets/animations/globe.json',
+          height: 200,
+          width: 200,
+        ),
+        const SizedBox(height: 20),
+        const Text(
           'No bookmarked items',
           style: TextStyle(
               color: kBlueColor,
               fontFamily: 'Space',
               fontWeight: FontWeight.bold),
         ),
-        SizedBox(height: 20),
-        Text(
+        const SizedBox(height: 20),
+        const Text(
           'You can bookmark items by clicking the bookmark icon on the item',
+          textAlign: TextAlign.center,
           style: TextStyle(
               color: kBlueColor,
               fontFamily: 'Space',

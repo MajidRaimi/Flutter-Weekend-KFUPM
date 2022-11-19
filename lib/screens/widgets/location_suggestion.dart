@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../constants/colors.dart';
 import 'location_information.dart';
@@ -30,7 +31,6 @@ class _LocationSuggestionState extends State<LocationSuggestion> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(24.0),
         child: Container(
-            color: kDarkBlueColor,
             child: GestureDetector(
               onTap: () {
                 Navigator.push(
@@ -53,10 +53,17 @@ class _LocationSuggestionState extends State<LocationSuggestion> {
                   Hero(
                     tag: widget.tag,
                     child: Image.network(
-                      
                       widget.imageLink,
                       fit: BoxFit.cover,
                       height: double.infinity,
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Center(
+                          child: Lottie.asset('assets/animations/globe.json')
+                          
+                        );
+                      
+                      },
                     ),
                   ),
                   Positioned(
