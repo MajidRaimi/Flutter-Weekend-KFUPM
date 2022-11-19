@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:iau_flutter_weekend/screens/widgets/email_text_field.dart';
 import 'package:iau_flutter_weekend/screens/widgets/password_text_field.dart';
-
+import 'package:iau_flutter_weekend/services/collections_requests.dart';
 import '../constants/colors.dart';
 import 'on_boarding_screen.dart';
 import 'widgets/main_button.dart';
@@ -22,6 +24,62 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
+  UserCredential? userCredential;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  bool isLoading = false;
+
+  // Show error messages and user feedback
+  void showsnackbar(BuildContext context, String text) {
+    final snackBar = SnackBar(
+      content: Text(text),
+      duration: const Duration(seconds: 1, milliseconds: 500),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void toOnBoarding() {
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+      return const OnBoardingScreen();
+    }));
+  }
+
+  Future<int> register() async {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      userCredential = await _auth.createUserWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+      // Update additional information of user in collections
+      _firestore.collection("users").doc(userCredential!.user!.uid).set(
+        {
+          "firstName": _firstNameController.text,
+          "lastName": _lastNameController.text,
+          "bookmark": [],
+        },
+      );
+      CollectionsRequests.userCredential = userCredential;
+      setState(() {
+        isLoading = false;
+      });
+      return 0;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        showsnackbar(context, "The password provided is too weak.");
+      } else if (e.code == 'email-already-in-use') {
+        showsnackbar(context, "The account already exists for that email.");
+      } else {
+        showsnackbar(context, e.code);
+      }
+      setState(() {
+        isLoading = false;
+      });
+      return 1;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,18 +135,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             controller: _passwordController,
                           ),
                           const SizedBox(height: 16),
-                          MainButton(
-                              text: 'Register',
-                              onTap: () {
-                                // TODO : Signup Method
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const OnBoardingScreen(),
-                                  ),
-                                );
-                              })
+                          isLoading
+                              ? const CircularProgressIndicator()
+                              : MainButton(
+                                  text: 'Register',
+                                  onTap: () async {
+                                    if (_formKey.currentState!.validate()) {
+                                      if (await register() == 0) {
+                                        toOnBoarding();
+                                      }
+                                    }
+                                  })
                         ],
                       ),
                     ),

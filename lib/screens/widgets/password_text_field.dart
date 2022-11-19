@@ -25,10 +25,27 @@ class PasswordTextField extends StatelessWidget {
           prefixIcon: const Icon(
             Icons.password,
           ),
-          border : const OutlineInputBorder() , 
+          border: const OutlineInputBorder(),
           labelText: text,
         ),
-
+        // Validate Password
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Please enter some text';
+          }
+          if (value.length < 8) {
+            return 'Password must be at least 8 characters';
+          }
+          // Regex for strong password
+          final RegExp nameExp = RegExp(
+            r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$',
+          );
+          // Validate
+          if (!nameExp.hasMatch(value)) {
+            return 'Password must contain at least:\n-One uppercase letter \n-One lowercase letter \n-One number \n-One special character';
+          }
+          return null;
+        },
       ),
     );
   }

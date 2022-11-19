@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter/material.dart';
-
-import '../../constants/colors.dart';
-
 class EmailTextField extends StatelessWidget {
   const EmailTextField({
     Key? key,
@@ -25,9 +21,22 @@ class EmailTextField extends StatelessWidget {
           prefixIcon: const Icon(
             Icons.email,
           ),
-          border : const OutlineInputBorder() , 
+          border: const OutlineInputBorder(),
           labelText: text,
         ),
+        // Validate email using regex
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Please enter some text';
+          }
+          final RegExp nameExp = RegExp(
+            r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+',
+          );
+          if (!nameExp.hasMatch(value)) {
+            return 'Please enter a valid email address';
+          }
+          return null;
+        },
       ),
     );
   }

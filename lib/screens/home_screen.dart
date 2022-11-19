@@ -55,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
           tabIndex = v;
         },
         children: [
-          const LikeScreen() , 
+          const LikeScreen(),
           Container(
             width: double.infinity,
             height: double.infinity,
