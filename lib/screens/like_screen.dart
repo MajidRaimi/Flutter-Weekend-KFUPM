@@ -5,6 +5,8 @@ import 'package:lottie/lottie.dart';
 import '../model/bookmark_model.dart';
 import 'widgets/main_button.dart';
 
+
+
 class LikeScreen extends StatefulWidget {
   const LikeScreen({super.key, required this.locations});
 
@@ -28,6 +30,11 @@ class _LikeScreenState extends State<LikeScreen> {
       }
     });
   }
+
+  void iLike() {
+    changeCard() ; 
+    // TODO: add to notifier 
+  } 
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +76,7 @@ class _LikeScreenState extends State<LikeScreen> {
                         padding: const EdgeInsets.all(16.0),
                         child: MainButton(
                           text: 'I LIKE!',
-                          onTap: changeCard,
+                          onTap: iLike,
                         ),
                       ),
                     ),
