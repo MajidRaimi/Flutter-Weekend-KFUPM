@@ -90,7 +90,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 50),
+                    const SizedBox(
+                      height: 50,
+                    ),
                     Expanded(
                       child: Center(
                         child: Column(
@@ -113,7 +115,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                ),
                 child: Column(
                   children: [
                     Expanded(
