@@ -8,3 +8,4 @@ class Bookmark {
   Bookmark(this.locationName, this.tag, this.imageLink, this.location,
       this.information);
 }
+

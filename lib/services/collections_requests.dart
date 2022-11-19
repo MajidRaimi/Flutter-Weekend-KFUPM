@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:iau_flutter_weekend/model/bookmark_model.dart';
 
 class CollectionsRequests {
   static User? currentUser;
@@ -17,18 +18,17 @@ class CollectionsRequests {
   }
 
   // Add Bookmark
-  Future<void> addBookmark(String locationName, String location,
-      String imageLink, String tag, String information) async {
+  Future<void> addBookmark(Bookmark bookmark) async {
     final userDocument =
         await _firestore.collection("users").doc(currentUser!.uid).get();
     final bookmarks = userDocument.data()!["bookmark"] as List<dynamic>;
     bookmarks.add(
       {
-        "locationName": locationName,
-        "location": location,
-        "imageLink": imageLink,
-        "tag": tag,
-        "information": information,
+        "locationName": bookmark.locationName,
+        "location": bookmark.location,
+        "imageLink": bookmark.imageLink,
+        "tag": bookmark.tag,
+        "information": bookmark.information,
       },
     );
     await _firestore
@@ -54,6 +54,7 @@ class CollectionsRequests {
     final userDocument =
         await _firestore.collection("users").doc(currentUser!.uid).get();
     final bookmarks = userDocument.data()!["bookmark"] as List<dynamic>;
+    
     return bookmarks;
   }
 }

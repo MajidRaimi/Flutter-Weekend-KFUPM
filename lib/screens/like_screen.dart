@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iau_flutter_weekend/hooks/BookmarkFuture.dart';
 import 'package:iau_flutter_weekend/screens/widgets/location_suggestion.dart';
+import 'package:iau_flutter_weekend/services/collections_requests.dart';
 import 'package:lottie/lottie.dart';
-
+import '../hooks/BookmarkProvider.dart';
 import '../model/bookmark_model.dart';
 import 'widgets/main_button.dart';
 
-
-
-class LikeScreen extends StatefulWidget {
+class LikeScreen extends ConsumerStatefulWidget {
   const LikeScreen({super.key, required this.locations});
 
   final List<Bookmark> locations;
 
   @override
-  State<LikeScreen> createState() => _LikeScreenState();
+  ConsumerState<LikeScreen> createState() => _LikeScreenState();
 }
 
-class _LikeScreenState extends State<LikeScreen> {
+class _LikeScreenState extends ConsumerState<LikeScreen> {
   int index = 0;
 
   void changeCard() {
@@ -31,13 +32,11 @@ class _LikeScreenState extends State<LikeScreen> {
     });
   }
 
-  void iLike() {
-    changeCard() ; 
-    // TODO: add to notifier 
-  } 
-
+ 
   @override
   Widget build(BuildContext context) {
+    final bookmarks = ref.watch(bookmarkProvider);
+    final collections = CollectionsRequests();
     return Scaffold(
       body: Center(
           child: SafeArea(
@@ -76,7 +75,14 @@ class _LikeScreenState extends State<LikeScreen> {
                         padding: const EdgeInsets.all(16.0),
                         child: MainButton(
                           text: 'I LIKE!',
-                          onTap: iLike,
+                          onTap: () {
+                            ref
+                                .read(BookmarksProvider.notifier)
+                                .addBookmark(widget.locations[index]);
+                                collections.addBookmark(widget.locations[index]);
+                                changeCard();
+
+                          },
                         ),
                       ),
                     ),

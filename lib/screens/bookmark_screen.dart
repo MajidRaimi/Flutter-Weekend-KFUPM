@@ -1,38 +1,31 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iau_flutter_weekend/constants/colors.dart';
+import 'package:iau_flutter_weekend/hooks/BookmarkProvider.dart';
 import 'package:iau_flutter_weekend/services/collections_requests.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:lottie/lottie.dart';
 
+import '../model/bookmark_model.dart';
 import 'login_screen.dart';
 
-class BookmarkScreen extends StatefulWidget {
+class BookmarkScreen extends ConsumerStatefulWidget {
   const BookmarkScreen({super.key});
 
   @override
-  State<BookmarkScreen> createState() => _BookmarkScreenState();
+  ConsumerState<BookmarkScreen> createState() => _BookmarkScreenState();
 }
 
-class _BookmarkScreenState extends State<BookmarkScreen> {
-  List<dynamic> bookmarks = [];
+class _BookmarkScreenState extends ConsumerState<BookmarkScreen> {
   CollectionsRequests collections = CollectionsRequests();
   Future<void> _handleRefresh() async {
-    await collections.addBookmark(
-        "locationName1", "location", "imageLink", "111", "information");
-    await collections.addBookmark(
-        "locationName2", "location", "imageLink", "222", "information");
-    await collections.addBookmark(
-        "locationName3", "location", "imageLink", "333", "information");
-    bookmarks = await collections.getBookmarks();
-    setState(() {
-      bookmarks = bookmarks;
-    });
     return Future.delayed(const Duration(seconds: 2));
   }
 
   @override
   Widget build(BuildContext context) {
+    List<Bookmark> bookmarks = ref.watch(BookmarksProvider);
     final double height = MediaQuery.of(context).size.height;
 
     void toLoginScreen() {
@@ -97,8 +90,14 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                               itemBuilder: (BuildContext context, int index) {
                                 var bookmark = bookmarks[index];
                                 return ListTile(
-                                    title: Text(bookmark['locationName']),
-                                    subtitle: Text(bookmark['location']));
+                                    title: Text(bookmark.locationName),
+                                    subtitle: Text(bookmark.location),
+                                    trailing: ElevatedButton(child: Icon(Icons.delete) ,onPressed: (){
+                                      ref.read(BookmarksProvider.notifier).removeBookmark(bookmark.tag);
+                                      collections.removeBookmark(bookmark.locationName);
+
+                                    },),
+                                    );
                               },
                             ),
                           ),
