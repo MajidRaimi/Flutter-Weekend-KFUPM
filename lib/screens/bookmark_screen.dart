@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:iau_flutter_weekend/constants/colors.dart';
 import 'package:iau_flutter_weekend/services/collections_requests.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:lottie/lottie.dart';
 
 import 'login_screen.dart';
 
@@ -17,15 +18,16 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
   List<dynamic> bookmarks = [];
   CollectionsRequests collections = CollectionsRequests();
   Future<void> _handleRefresh() async {
-    setState(() {
-      collections.addBookmark(
-          "locationName1", "location", "imageLink", "111", "information");
-      collections.addBookmark(
-          "locationName2", "location", "imageLink", "222", "information");
-      collections.addBookmark(
-          "locationName3", "location", "imageLink", "333", "information");
-    });
+    await collections.addBookmark(
+        "locationName1", "location", "imageLink", "111", "information");
+    await collections.addBookmark(
+        "locationName2", "location", "imageLink", "222", "information");
+    await collections.addBookmark(
+        "locationName3", "location", "imageLink", "333", "information");
     bookmarks = await collections.getBookmarks();
+    setState(() {
+      bookmarks = bookmarks;
+    });
     return Future.delayed(const Duration(seconds: 2));
   }
 
@@ -76,29 +78,27 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
             height: height * 0.5,
             onRefresh: _handleRefresh,
             child: ListView(
-              children: bookmarks == null
+              children: bookmarks.isEmpty
                   ? const [EmptyBookmark()]
                   : [
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          const Icon(
-                            Icons.group,
-                            size: 100,
-                          ),
-                          const Text(
-                            "Team",
-                            style: TextStyle(fontSize: 30),
+                          Lottie.asset(
+                            'assets/animations/globe.json',
+                            height: 200,
+                            width: 200,
                           ),
                           // Show all user information from a list of users
-                          Expanded(
+                          SizedBox(
+                            height: height * 0.5,
                             child: ListView.builder(
                               itemCount: bookmarks.length,
                               itemBuilder: (BuildContext context, int index) {
                                 var bookmark = bookmarks[index];
                                 return ListTile(
-                                    title: bookmark['locationName'],
-                                    subtitle: bookmark['location']);
+                                    title: Text(bookmark['locationName']),
+                                    subtitle: Text(bookmark['location']));
                               },
                             ),
                           ),
