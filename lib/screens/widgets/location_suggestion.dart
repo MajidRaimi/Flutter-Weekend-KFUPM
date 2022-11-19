@@ -53,8 +53,10 @@ class _LocationSuggestionState extends State<LocationSuggestion> {
                   Hero(
                     tag: widget.tag,
                     child: Image.network(
+                      
                       widget.imageLink,
                       fit: BoxFit.cover,
+                      height: double.infinity,
                     ),
                   ),
                   Positioned(

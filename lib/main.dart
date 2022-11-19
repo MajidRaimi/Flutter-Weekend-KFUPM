@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'constants/colors.dart';
 import 'firebase_options.dart';
 import 'screens/home_screen.dart';
@@ -11,7 +12,7 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -29,7 +30,9 @@ class MyApp extends StatelessWidget {
         ).copyWith(),
       ),
       debugShowCheckedModeBanner: false,
-      home: FirebaseAuth.instance.currentUser != null ? const HomeScreen() : const LoginScreen(),
+      home: FirebaseAuth.instance.currentUser != null
+          ? const HomeScreen()
+          : const LoginScreen(),
     );
   }
 }

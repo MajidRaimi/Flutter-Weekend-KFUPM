@@ -11,6 +11,11 @@ class CollectionsRequests {
     return userDocument.data() as Map<String, dynamic>;
   }
 
+  Future<List<dynamic>> getLocations() async {
+    final locations = await _firestore.collection("locations").get();
+    return locations.docs.map((e) => e.data()).toList();
+  }
+
   // Add Bookmark
   Future<void> addBookmark(String locationName, String location,
       String imageLink, String tag, String information) async {
