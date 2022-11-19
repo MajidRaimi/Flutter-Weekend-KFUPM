@@ -66,7 +66,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                             ),
                             SizedBox(height: 16),
                             Text(
-                                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+                                'Looking to explore new places that might have never crossed your mind? you have come to the right place!  ',
                                 textAlign: TextAlign.center,
                                 style: kOnBoardingFontText),
                           ],
@@ -102,7 +102,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                             ),
                             SizedBox(height: 16),
                             Text(
-                                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+                                '"Where to ?" is an application for people who seek to try new things, explore more places and be out there!',
                                 textAlign: TextAlign.center,
                                 style: kOnBoardingFontText),
                           ],
@@ -138,7 +138,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                             ),
                             SizedBox(height: 16),
                             Text(
-                                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+                                'Start your new joureny in a place where your only aim is to discover!',
                                 textAlign: TextAlign.center,
                                 style: kOnBoardingFontText),
                           ],
