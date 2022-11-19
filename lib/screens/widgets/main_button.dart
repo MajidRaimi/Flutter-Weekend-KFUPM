@@ -7,10 +7,12 @@ class MainButton extends StatelessWidget {
     Key? key,
     required this.text,
     required this.onTap,
+    this.disabled = false,
   }) : super(key: key);
 
   final String text;
   final VoidCallback onTap;
+  final bool disabled;
 
   @override
   Widget build(BuildContext context) {
@@ -20,14 +22,19 @@ class MainButton extends StatelessWidget {
       child: Container(
         width: width * 0.45,
         decoration: BoxDecoration(
-            color: kDarkBlueColor, borderRadius: BorderRadius.circular(16)),
+          color: disabled ? Colors.grey.shade400 : kBlueColor,
+          borderRadius: BorderRadius.circular(16),
+        ),
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
               text,
-              style: const TextStyle(
-                  color: kWhiteColor, fontSize: 24, fontFamily: 'Space'),
+              style: TextStyle(
+                color: disabled ? kDarkBlueColor : kWhiteColor,
+                fontSize: 24,
+                fontFamily: 'Space',
+              ),
             ),
           ),
         ),

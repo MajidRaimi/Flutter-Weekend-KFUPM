@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../../constants/colors.dart';
 
-class EmailTextField extends StatelessWidget {
-  const EmailTextField({
+class NameTextField extends StatelessWidget {
+  const NameTextField({
     Key? key,
     required this.text,
     required this.controller,
@@ -18,13 +18,10 @@ class EmailTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return SizedBox(
-      width: width * 0.8,
+      width: width * 0.39,
       child: TextFormField(
         controller: controller,
         decoration: InputDecoration(
-          prefixIcon: const Icon(
-            Icons.email,
-          ),
           border : const OutlineInputBorder() , 
           labelText: text,
         ),

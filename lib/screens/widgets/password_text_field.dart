@@ -17,7 +17,7 @@ class PasswordTextField extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     return SizedBox(
       width: width * 0.8,
-      child: TextField(
+      child: TextFormField(
         obscureText: true,
         controller: controller,
         decoration: InputDecoration(
@@ -25,13 +25,7 @@ class PasswordTextField extends StatelessWidget {
           prefixIcon: const Icon(
             Icons.password,
           ),
-          focusColor: kDarkBlueColor,
-          focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(
-              color: kDarkBlueColor,
-            ),
-          ),
-          enabledBorder: const OutlineInputBorder(),
+          border : const OutlineInputBorder() , 
           labelText: text,
         ),
 
