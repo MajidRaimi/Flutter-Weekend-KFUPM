@@ -2,6 +2,7 @@ import 'package:circle_nav_bar/circle_nav_bar.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/colors.dart';
+import 'bookmark_screen.dart';
 import 'like_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -56,11 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         children: [
           const LikeScreen(),
-          Container(
-            width: double.infinity,
-            height: double.infinity,
-            color: Colors.green,
-          ),
+          BookmarkScreen(),
         ],
       ),
     );

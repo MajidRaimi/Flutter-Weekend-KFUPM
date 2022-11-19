@@ -1,10 +1,13 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:iau_flutter_weekend/screens/home_screen.dart';
 import 'package:iau_flutter_weekend/screens/widgets/email_text_field.dart';
 import 'package:iau_flutter_weekend/screens/widgets/main_button.dart';
 import 'package:iau_flutter_weekend/services/collections_requests.dart';
+import '../constants/colors.dart';
 import 'signup_screen.dart';
 import 'widgets/password_text_field.dart';
 
@@ -26,7 +29,13 @@ class _LoginScreenState extends State<LoginScreen> {
   // Show error messages and user feedback
   void showsnackbar(BuildContext context, String text) {
     final snackBar = SnackBar(
-      content: Text(text),
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: 'Sorry error ocurred!',
+        message: text,
+        contentType: ContentType.failure,
+      ),
       duration: const Duration(seconds: 1, milliseconds: 500),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -131,7 +140,16 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: 20,
                       ),
                       isLoading
-                          ? const CircularProgressIndicator()
+                          ? SpinKitFadingCircle(
+                              itemBuilder: (BuildContext context, int index) {
+                                return DecoratedBox(
+                                  decoration: BoxDecoration(
+                                    color:
+                                        index.isEven ? kBlueColor : kGreenColor,
+                                  ),
+                                );
+                              },
+                            )
                           : MainButton(
                               text: 'Login',
                               onTap: () async {
