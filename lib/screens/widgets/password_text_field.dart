@@ -42,7 +42,7 @@ class PasswordTextField extends StatelessWidget {
           );
           // Validate
           if (!nameExp.hasMatch(value)) {
-            return 'Password must contain at least:\n-One uppercase letter \n-One lowercase letter \n-One number \n-One special character';
+            return 'Password must contain at least:\n- One uppercase letter \n- One lowercase letter \n- One number \n- One special character';
           }
           return null;
         },
